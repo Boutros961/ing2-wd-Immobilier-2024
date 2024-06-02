@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sélectionner un Rendez-vous</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+        .disponible {
+            background-color: white;
+            cursor: pointer;
+        }
+        .non-disponible {
+            background-color: lightblue;
+        }
+        .indisponible {
+            background-color: black;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="index.html">Omnes Immobilier</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="browse.html">Tout Parcourir</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="search.html">Recherche</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="appointments.html">Rendez-vous</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="account.html">Votre Compte</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="container my-5">
+        <h1>Sélectionner un Rendez-vous</h1>
+        <table id="timeSlots">
+            <tr>
+                <th>Lundi</th>
+                <th>Mardi</th>
+                <th>Mercredi</th>
+                <th>Jeudi</th>
+                <th>Vendredi</th>
+            </tr>
+            <!-- Les créneaux seront injectés ici -->
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const agentId = urlParams.get('agentId');
+            fetch(`select_appointment.php?action=list&agentId=${agentId}`)
+                .then(response => response.json())
+                .then(data => {
+                    displayTimeSlots(data);
+                });
+
+            function displayTimeSlots(slots) {
+                const table = document.querySelector('#timeSlots');
+                const days = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"];
+                const timeSlots = {};
+
+                days.forEach(day => {
+                    timeSlots[day] = [];
+                });
+
+                Object.keys(slots).forEach(day => {
+                    slots[day].forEach(slot => {
+                        timeSlots[day].push(slot);
+                    });
+                });
+
+                const maxSlots = Math.max(...Object.values(timeSlots).map(daySlots => daySlots.length));
+
+                for (let i = 0; i < maxSlots; i++) {
+                    const row = table.insertRow();
+                    days.forEach(day => {
+                        const cell = row.insertCell();
+                        const slot = timeSlots[day][i];
+                        if (slot) {
+                            cell.textContent = slot.Heure;
+                            if (slot.Disponible == 1) {
+                                cell.className = 'disponible';
+                                cell.addEventListener('click', () => takeAppointment(slot.ID, day, slot.Heure));
+                            } else if (slot.Disponible == 0) {
+                                cell.className = 'non-disponible';
+                            } else {
+                                cell.className = 'indisponible';
+                            }
+                        } else {
+                            cell.textContent = '';
+                        }
+                    });
+                }
+            }
+
+            function takeAppointment(slotId, jour, heure) {
+                const urlParams = new URLSearchParams(window.location.search);
+                const agentId = urlParams.get('agentId');
+                const proprieteid = urlParams.get('proprieteid')
+                fetch('select_appointment.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `action=take&creneauId=${slotId}&agentId=${agentId}&clientId=1&date_rendezvous=${jour}&heure_rendezvous=${heure}&proprieteid=${proprieteid}`
+                })
+                .then(response => response.text())
+                .then(data => {
+                    alert(data);
+                    location.reload(); // Recharger la page pour mettre à jour les créneaux
+                });
+            }
+        });
+    </script>
+</body>
+</html>
