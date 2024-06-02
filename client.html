@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Omnes Immobilier - Client</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="index.html">Omnes Immobilier</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="browse.html">Tout Parcourir</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="search.html">Recherche</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="appointments.html">Rendez-vous</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="account.html">Votre Compte <span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <h1>Compte Client</h1>
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Informations du compte</h5>
+                <div id="clientInfo"></div>
+            </div>
+        </div>
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Historique des consultations</h5>
+                <ul class="list-group" id="consultationsList">
+                    <!-- Les consultations seront ajoutées ici -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+    var urlParams = new URLSearchParams(window.location.search);
+    var clientId = urlParams.get('id');
+    console.log("Client ID:", clientId); // Vérification de l'ID du client
+
+    if (clientId) {
+        $.ajax({
+            url: 'get_client_info.php',
+            type: 'GET',
+            data: { id: clientId },
+            success: function(response) {
+                try {
+                    var data = JSON.parse(response);
+                    console.log("Response from server:", data); // Vérification de la réponse du serveur
+
+                    if (data.error) {
+                        alert(data.error);
+                    } else {
+                        $('#clientInfo').html(data.info);
+                        $('#consultationsList').html(data.consultations);
+                    }
+                } catch (e) {
+                    console.error("Error parsing JSON response:", e);
+                    alert('Erreur lors de la récupération des informations.');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("Error fetching client info:", status, error);
+                alert('Erreur lors de la récupération des informations.');
+            }
+        });
+    } else {
+        console.error("No client ID provided in URL");
+        alert('Aucun identifiant client fourni dans l\'URL');
+    }
+});
+
+    </script>
+</body>
+</html>
