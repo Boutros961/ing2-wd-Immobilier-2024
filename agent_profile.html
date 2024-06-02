@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil de l'agent</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .agent-profile {
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+        .agent-profile img {
+            max-width: 150px;
+            border-radius: 50%;
+        }
+        .agent-profile .contact-info {
+            margin-top: 20px;
+        }
+        .schedule-table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        .schedule-table th, .schedule-table td {
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #000;
+        }
+        .schedule-table th {
+            background-color: #e9ecef;
+        }
+        .schedule-table .am, .schedule-table .pm {
+            background-color: #f1f1f1;
+        }
+        .schedule-table .unavailable {
+            background-color: #000;
+            color: #fff;
+        }
+        .schedule-table .available {
+            background-color: #fff;
+        }
+        .action-buttons {
+            margin-top: 20px;
+        }
+        .action-buttons .btn {
+            margin: 5px;
+        }
+    </style>    
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="index.html">Omnes Immobilier</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="browse.html">Tout Parcourir</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="search.html">Recherche</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="appointments.html">Rendez-vous</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="account.html">Votre Compte</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="agent-profile" id="agentProfile">
+            <!-- Les informations de l'agent seront chargées ici -->
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var agentId = urlParams.get('id');
+    
+            if (agentId) {
+                $.ajax({
+                    url: 'agent_profile.php',
+                    type: 'GET',
+                    data: { id: agentId },
+                    success: function(response) {
+                        var agent = JSON.parse(response);
+                        console.log(agent); // Ajoutez cette ligne pour afficher les données récupérées
+                        if (agent) {
+                            var profile = `
+                                <img src="${agent.Photo}" alt="Photo de ${agent.Nom} ${agent.Prenom}">
+                                <h2>${agent.Nom} ${agent.Prenom}</h2>
+                                <p class="text-danger">Agent Immobilier agréé</p>
+                                <div class="contact-info">
+                                    <p><strong>Téléphone:</strong> ${agent.Telephone}</p>
+                                    <p><strong>Email:</strong> ${agent.Email}</p>
+                                </div>
+                                <table class="schedule-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Spécialité</th>
+                                            <th>Agent</th>
+                                            <th colspan="2">Lundi</th>
+                                            <th colspan="2">Mardi</th>
+                                            <th colspan="2">Mercredi</th>
+                                            <th colspan="2">Jeudi</th>
+                                            <th colspan="2">Vendredi</th>
+                                            <th colspan="2">Samedi</th>
+                                        </tr>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th>AM</th>
+                                            <th>PM</th>
+                                            <th>AM</th>
+                                            <th>PM</th>
+                                            <th>AM</th>
+                                            <th>PM</th>
+                                            <th>AM</th>
+                                            <th>PM</th>
+                                            <th>AM</th>
+                                            <th>PM</th>
+                                            <th>AM</th>
+                                            <th>PM</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>${agent.Specialite}</td>
+                                            <td>${agent.Nom} ${agent.Prenom}</td>
+                                            <td class="${agent.Lundi_AM ? 'available' : 'unavailable'}"></td>
+                                            <td class="${agent.Lundi_PM ? 'available' : 'unavailable'}"></td>
+                                            <td class="${agent.Mardi_AM ? 'available' : 'unavailable'}"></td>
+                                            <td class="${agent.Mardi_PM ? 'available' : 'unavailable'}"></td>
+                                            <td class="${agent.Mercredi_AM ? 'available' : 'unavailable'}"></td>
+                                            <td class="${agent.Mercredi_PM ? 'available' : 'unavailable'}"></td>
+                                            <td class="${agent.Jeudi_AM ? 'available' : 'unavailable'}"></td>
+                                            <td class="${agent.Jeudi_PM ? 'available' : 'unavailable'}"></td>
+                                            <td class="${agent.Vendredi_AM ? 'available' : 'unavailable'}"></td>
+                                            <td class="${agent.Vendredi_PM ? 'available' : 'unavailable'}"></td>
+                                            <td class="${agent.Samedi_AM ? 'available' : 'unavailable'}"></td>
+                                            <td class="${agent.Samedi_PM ? 'available' : 'unavailable'}"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="action-buttons">
+                                    <button class="btn btn-success" onclick="window.location.href='appointments.html?agentId=${agentId}'">Prendre un RDV</button>
+                                    <button class="btn btn-info">Communiquer avec l'agent immobilier</button>
+                                    <button class="btn btn-warning">Voir son CV</button>
+                                </div>
+                            `;
+                            $('#agentProfile').append(profile);
+                        } else {
+                            $('#agentProfile').append('<p>Agent non trouvé.</p>');
+                        }
+                    }
+                });
+            } else {
+                $('#agentProfile').append('<p>Aucun identifiant d\'agent fourni.</p>');
+            }
+        });
+    </script>
+</body>
+</html>
