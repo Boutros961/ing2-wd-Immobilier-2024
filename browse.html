@@ -93,7 +93,7 @@
                         $('#propertyList').empty();
                         if (properties.length > 0) {
                             properties.forEach(function(property) {
-                                var item = '<div class="col-md-4"><div class="card mb-4"><img src="' + property.Images + '" class="card-img-top" alt="..."><div class="card-body"><h5 class="card-title">' + property.Adresse + '</h5><p class="card-text">' + property.Description + '</p><p class="card-text"><strong>' + property.Prix + ' €</strong></p><a href="property_details.html?id=' + property.ID + '" class="btn btn-primary">Voir les détails</a></div></div></div>';
+                                var item = '<div class="col-md-4"><div class="card mb-4"><img src="' + property.Images + '" class="card-img-top" alt="..."><div class="card-body"><h5 class="card-title">' + property.Adresse + '</h5><p class="card-text">' + property.Description + '</p><p class="card-text"><strong>' + property.Prix + ' €</strong></p><a href="property_details.html?proprieteid=' + property.ID + '" class="btn btn-primary">Voir les détails</a></div></div></div>';
                                 $('#propertyList').append(item);
                             });
                         } else {
