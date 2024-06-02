@@ -1,0 +1,107 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.agent-card {
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 700px;
+    padding: 20px;
+    text-align: center;
+    border: 2px solid #4CAF50; /* Border color */
+}
+
+.agent-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.agent-photo {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    margin-right: 20px;
+    border: 3px solid #4CAF50; /* Border color */
+}
+
+.agent-details {
+    text-align: left;
+}
+
+.agent-details h2 {
+    margin: 0;
+    color: #333;
+}
+
+.agent-title {
+    color: #E74C3C; /* Red */
+    font-weight: bold;
+}
+
+.agent-schedule {
+    margin-top: 20px;
+}
+
+.agent-schedule table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.agent-schedule th,
+.agent-schedule td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+.agent-schedule th {
+    background-color: #AED581; /* Light green */
+    color: #333;
+}
+
+.agent-schedule td {
+    background-color: #F8F9F9; /* Light grey */
+    color: #333;
+}
+
+.agent-actions {
+    margin-top: 20px;
+}
+
+.agent-actions button {
+    background-color: #AED581; /* Light green */
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    color: #333;
+}
+
+.agent-actions button:hover {
+    background-color: #8BC34A; /* Darker green */
+}
+
+.agent-actions button:nth-child(2) {
+    background-color: #81D4FA; /* Light blue */
+}
+
+.agent-actions button:nth-child(2):hover {
+    background-color: #4FC3F7; /* Darker blue */
+}
+
+.agent-actions button:nth-child(3) {
+    background-color: #FFE082; /* Light yellow */
+}
+
+.agent-actions button:nth-child(3):hover {
+    background-color: #FFD54F; /* Darker yellow */
+}
