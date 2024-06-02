@@ -5,13 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Détails de la propriété</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
 </head>
-<style>
-    .property-price {
-        font-size: 2em;
-        font-weight: bold;
-    }
-</style>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="index.html">Omnes Immobilier</a>
@@ -50,7 +45,7 @@
     <script>
         $(document).ready(function() {
             var urlParams = new URLSearchParams(window.location.search);
-            var propertyId = urlParams.get('proprieteid');
+            var propertyId = urlParams.get('id');
 
             if (propertyId) {
                 $.ajax({
@@ -62,37 +57,7 @@
                     success: function(response) {
                         var property = JSON.parse(response);
                         if (property) {
-                            var details = '<h2>' + property.Adresse + '</h2><p>' + property.Description + '<p class="property-price">' + property.Prix + ' €</p><p>';
-                            details += '<div id="propertyImagesCarousel" class="carousel slide" data-ride="carousel">';
-                            details += '<div class="carousel-inner">';
-
-                            for (var i = 0; i < property.Images.length; i++) {
-                                details += '<div class="carousel-item' + (i === 0 ? ' active' : '') + '">';
-                                details += '<img src="' + property.Images[i] + '" class="d-block w-100" alt="Image ' + (i + 1) + '">';
-                                details += '</div>';
-                            }
-
-                            details += '</div>';
-                            details += '<a class="carousel-control-prev" href="#propertyImagesCarousel" role="button" data-slide="prev">';
-                            details += '<span class="carousel-control-prev-icon" aria-hidden="true"></span>';
-                            details += '<span class="sr-only">Previous</span>';
-                            details += '</a>';
-                            details += '<a class="carousel-control-next" href="#propertyImagesCarousel" role="button" data-slide="next">';
-                            details += '<span class="carousel-control-next-icon" aria-hidden="true"></span>';
-                            details += '<span class="sr-only">Next</span>';
-                            details += '</a>';
-                            details += '</div><br><br>';
-                            details += '<h3>Agent responsable</h3><p>' + property.AgentNom + ' ' + property.AgentPrenom + '</p><div class="d-flex justify-content-between">';
-                            details += '<a href="agent_profile.html?id=' + property.AgentID + '&proprieteid=' + propertyId + '" class="btn btn-info">Voir le profil de l\'agent</a>';
-
-                            if (property.Type === 'Résidentiel' || property.Type === 'Commercial' || property.Type === 'Terrain') {
-                                details += '<a href="achat.html?action=achat&proprieteid=' + propertyId + '&agentid=' + property.AgentID + '" class="btn btn-success ml-auto">Acheter</a>';
-                            } else if (property.Type === 'Appartement') {
-                                details += '<a href="achat.html?action=louer&proprieteid=' + propertyId + '&agentid=' + property.AgentID + '" class="btn btn-warning ml-auto">Louer</a>';
-                            }
-
-
-                            details += '</div>';
+                            var details = '<h2>' + property.Adresse + '</h2><p>' + property.Description + '</p><p><strong>' + property.Prix + ' €</strong></p><p>' + property.Details + '</p><img src="' + property.Images + '" class="img-fluid"><br><br><h3>Agent responsable</h3><p>' + property.AgentNom + ' ' + property.AgentPrenom + '</p><a href="agent_profile.html?id=' + property.AgentID + '" class="btn btn-info">Voir le profil de l\'agent</a>';
                             $('#propertyDetails').append(details);
                         } else {
                             $('#propertyDetails').append('<p>Propriété non trouvée.</p>');

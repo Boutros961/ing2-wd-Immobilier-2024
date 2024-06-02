@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Page Principale</title>
+    <style>
+        #content {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+    <script>
+        function loadHTML() {
+            var htmlContent = `
+                <p>
+                    L'Île-de-France est une région historique et administrative française. Il s'agit d'une région très
+                    fortement peuplée, qui représente à elle seule 18,8 % de la population de la France
+                    métropolitaine sur seulement 2,2 % de sa superficie, ce qui en fait la région la plus peuplée
+                    (12,40 millions d'habitants en 2022) et la plus densément peuplée (1 017 hab/km²) de France.
+                    Ses habitants sont appelés les Franciliens. Parfois désignée par son ancien nom de « région
+                    parisienne », elle est fortement centralisée sur l'agglomération parisienne, qui s'étend sur 23,7 %
+                    de la surface régionale, mais où habite 88,6 % de sa population. L'aire d'attraction de
+                    Paris recouvre, quant à elle, la totalité de la superficie francilienne et des portions de régions
+                    limitrophes.
+                    Avec un PIB estimé à 726 milliards d'euros et un PIB par habitant de 59 387 euros en 2018, c'est
+                    la région qui produit le plus de richesses en France. L'Île-de-France est également un pôle
+                    européen de premier ordre puisque c'est la deuxième région européenne pour le produit intérieur
+                    brut (PIB) comparé selon la méthode dite « à parité de pouvoir d'achat » (PPA), juste derrière
+                    la Rhénanie-du-Nord-Westphalie, et la sixième région d'Europe selon le PIB par habitant (PPA),
+                    derrière la région métropolitaine de Prague en Tchéquie, mais devant les Southern and
+                    Eastern (Dublin) en Irlande.
+                    La région est limitrophe de cinq autres régions françaises : les Hauts-de-France, au nord, le Grand
+                    Est, à l'est, la Bourgogne-Franche-Comté, au sud-est, le Centre-Val de Loire, au sud-ouest, et
+                    la Normandie, à l'ouest.
+                </p>
+            `;
+            document.getElementById('content').innerHTML = htmlContent;
+        }
+
+        function loadXML() {
+            var xmlContent = `
+                <note>
+                    <to>Tove</to>
+                    <from>Jani</from>
+                    <heading>Reminder</heading>
+                    <body>Don't forget me this weekend!</body>
+                </note>
+            `;
+            var parser = new DOMParser();
+            var xmlDoc = parser.parseFromString(xmlContent, "text/xml");
+            var xmlText = new XMLSerializer().serializeToString(xmlDoc.documentElement);
+            document.getElementById('content').innerText = xmlText;
+        }
+    </script>
+</head>
+<body>
+    <button onclick="loadHTML()">Afficher le contenu HTML</button>
+    <button onclick="loadXML()">Afficher le contenu XML</button>
+    <div id="content">
+        <!-- Le contenu sera chargé ici -->
+    </div>
+</body>
+</html>

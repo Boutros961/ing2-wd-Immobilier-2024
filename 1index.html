@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>L'Île-de-France</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 800px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #007bff;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            margin-bottom: 10px;
+            display: block;
+            width: 100%;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+        }
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>L'Île-de-France</h1>
+        <button onclick="loadHTML()" class="btn btn-primary mb-3">Qu'est-ce que l'Île-de-France?</button>
+        <div id="htmlContent">
+            <!-- Le contenu HTML sera chargé ici -->
+        </div>
+        <button onclick="loadXML()" class="btn btn-primary mt-3">Afficher les départements qui forment la région Île-de-France</button>
+        <div id="xmlContent">
+            <!-- Le contenu XML sera chargé ici -->
+        </div>
+    </div>
+
+    <script>
+        function loadHTML() {
+            var htmlContent = `
+                <p>
+                    L'Île-de-France est une région historique et administrative française. Il s'agit d'une région très
+                    fortement peuplée, qui représente à elle seule 18,8 % de la population de la France
+                    métropolitaine sur seulement 2,2 % de sa superficie, ce qui en fait la région la plus peuplée
+                    (12,40 millions d'habitants en 2022) et la plus densément peuplée (1 017 hab/km²) de France.
+                    Ses habitants sont appelés les Franciliens. Parfois désignée par son ancien nom de « région
+                    parisienne », elle est fortement centralisée sur l'agglomération parisienne, qui s'étend sur 23,7 %
+                    de la surface régionale, mais où habite 88,6 % de sa population. L'aire d'attraction de
+                    Paris recouvre, quant à elle, la totalité de la superficie francilienne et des portions de régions
+                    limitrophes.
+                    Avec un PIB estimé à 726 milliards d'euros et un PIB par habitant de 59 387 euros en 2018, c'est
+                    la région qui produit le plus de richesses en France. L'Île-de-France est également un pôle
+                    européen de premier ordre puisque c'est la deuxième région européenne pour le produit intérieur
+                    brut (PIB) comparé selon la méthode dite « à parité de pouvoir d'achat » (PPA), juste derrière
+                    la Rhénanie-du-Nord-Westphalie, et la sixième région d'Europe selon le PIB par habitant (PPA),
+                    derrière la région métropolitaine de Prague en Tchéquie, mais devant les Southern and
+                    Eastern (Dublin) en Irlande.
+                    La région est limitrophe de cinq autres régions françaises : les Hauts-de-France, au nord, le Grand
+                    Est, à l'est, la Bourgogne-Franche-Comté, au sud-est, le Centre-Val de Loire, au sud-ouest, et
+                    la Normandie, à l'ouest.
+                </p>`;
+            document.getElementById('htmlContent').innerHTML = htmlContent;
+        }
+
+        function loadXML() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "regions.xml", true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var xmlDoc = xhr.responseXML;
+                    var table = `<table class="table table-bordered table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Département</th>
+                                <th scope="col">Nord</th>
+                                <th scope="col">Est</th>
+                                <th scope="col">Sud</th>
+                                <th scope="col">Ouest</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+
+                    var departements = xmlDoc.getElementsByTagName("departement");
+                    for (var i = 0; i < departements.length; i++) {
+                        var name = departements[i].getAttribute("name");
+                        var nord = departements[i].getElementsByTagName("nord")[0].textContent;
+                        var est = departements[i].getElementsByTagName("est")[0].textContent;
+                        var sud = departements[i].getElementsByTagName("sud")[0].textContent;
+                        var ouest = departements[i].getElementsByTagName("ouest")[0].textContent;
+
+                        table += `<tr>
+                            <td>${name}</td>
+                            <td>${nord}</td>
+                            <td>${est}</td>
+                            <td>${sud}</td>
+                            <td>${ouest}</td>
+                        </tr>`;
+                    }
+
+                    table += `</tbody></table>`;
+                    document.getElementById('xmlContent').innerHTML = table;
+                }
+            };
+            xhr.send();
+        }
+    </script>
+</body>
+</html>
