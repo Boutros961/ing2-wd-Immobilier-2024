@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Omnes Immobilier - Votre Compte</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
- 
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -38,32 +37,62 @@
         <h1>Votre Compte</h1>
         <div class="card mb-3">
             <div class="card-body">
-                <h5 class="card-title">Informations du compte</h5>
-                <form id="accountForm">
+                <h5 class="card-title">Se Connecter</h5>
+                <form id="loginForm">
                     <div class="form-group">
-                        <label for="nom">Nom</label>
-                        <input type="text" class="form-control" id="nom" value="Jean Dupont">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" class="form-control" id="loginEmail" required>
                     </div>
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" class="form-control" id="email" value="jean.dupont@example.com">
+                        <label for="loginPassword">Mot de Passe</label>
+                        <input type="password" class="form-control" id="loginPassword" required>
                     </div>
-                    <div class="form-group">
-                        <label for="adresse">Adresse</label>
-                        <input type="text" class="form-control" id="adresse" value="123 Rue de l'Immobilier, 75001 Paris">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+                    <button type="submit" class="btn btn-primary">Se Connecter</button>
                 </form>
             </div>
         </div>
         <div class="card mb-3">
             <div class="card-body">
-                <h5 class="card-title">Historique des consultations</h5>
-                <ul class="list-group">
-                    <!-- Exemple de consultation -->
-                    <li class="list-group-item">Consultation avec Jean-Pierre Segado - 20/06/2024 - Résidentiel</li>
-                    <!-- Ajouter d'autres consultations ici -->
-                </ul>
+                <h5 class="card-title">Créer un Compte</h5>
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="registerNom">Nom</label>
+                        <input type="text" class="form-control" id="registerNom" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPrenom">Prénom</label>
+                        <input type="text" class="form-control" id="registerPrenom" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerEmail">Email</label>
+                        <input type="email" class="form-control" id="registerEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">Mot de Passe</label>
+                        <input type="password" class="form-control" id="registerPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerTelephone">Numéro de Téléphone</label>
+                        <input type="text" class="form-control" id="registerTelephone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerAdresse">Adresse</label>
+                        <textarea class="form-control" id="registerAdresse" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerville">Ville</label>
+                        <input type="password" class="form-control" id="registerville" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registercodepostal">Code Postal</label>
+                        <input type="password" class="form-control" id="registercodepostal" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerpays">Pays</label>
+                        <input type="password" class="form-control" id="registerpays" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Créer un Compte</button>
+                </form>
             </div>
         </div>
     </div>
@@ -73,27 +102,75 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('#accountForm').on('submit', function(event) {
+            $('#loginForm').on('submit', function(event) {
                 event.preventDefault();
-                var nom = $('#nom').val();
-                var email = $('#email').val();
-                var adresse = $('#adresse').val();
-
-                if (!nom || !email || !adresse) {
-                    alert('Veuillez remplir tous les champs.');
-                    return;
-                }
+                var email = $('#loginEmail').val();
+                var password = $('#loginPassword').val();
 
                 $.ajax({
-                    url: 'http://localhost:8888/PROJET/account.php',
+                    url: 'login.php',
+                    type: 'POST',
+                    data: {
+                        email: email,
+                        password: password
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.error) {
+                            alert(response.error);
+                        } else if (response.type === 'Administrateur') {
+                            window.location.href = 'administrateur.html?id=' + response.id;
+                        } else if (response.type === 'Agent') {
+                            window.location.href = 'agent.html?id=' + response.id;
+                        } else if (response.type === 'Client') {
+                            window.location.href = 'client.html?id=' + response.id;
+                        } else {
+                            alert('Type d\'utilisateur non reconnu');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Erreur: ' + error);
+                    }
+                });
+            });
+            
+
+            $('#registerForm').on('submit', function(event) {
+                event.preventDefault();
+                var nom = $('#registerNom').val();
+                var prenom = $('#registerPrenom').val();
+                var email = $('#registerEmail').val();
+                var password = $('#registerPassword').val();
+                var telephone = $('#registerTelephone').val();
+                var adresse = $('#registerAdresse').val();
+                var ville = $('#registerville').val();
+                var codepostal = $('#registercodepostal').val();
+                var pays = $('registerpays').val();
+
+                $.ajax({
+                    url: 'register.php',
                     type: 'POST',
                     data: {
                         nom: nom,
+                        prenom: prenom,
                         email: email,
-                        adresse: adresse
+                        password: password,
+                        telephone: telephone,
+                        adresse: adresse,
+                        ville: ville,
+                        codepostal: codepostal,
+                        pays: pays,
                     },
+                    dataType: 'json',
                     success: function(response) {
-                        alert(response);
+                        if (response.error) {
+                            alert(response.error);
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Erreur: ' + error);
                     }
                 });
             });
