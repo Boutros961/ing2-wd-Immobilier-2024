@@ -46,6 +46,8 @@
         }
         .action-buttons {
             margin-top: 20px;
+            display: flex;
+            justify-content: center;
         }
         .action-buttons .btn {
             margin: 5px;
@@ -83,6 +85,11 @@
         <div class="agent-profile" id="agentProfile">
             <!-- Les informations de l'agent seront chargées ici -->
         </div>
+        <div class="action-buttons">
+            <button class="btn btn-success" onclick="takeAppointment()">Prendre un RDV</button>
+            <button class="btn btn-info" onclick="communicateWithAgent()">Communiquer avec l'agent immobilier</button>
+            <button class="btn btn-warning" onclick="viewCV()">Voir son CV</button>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -92,6 +99,7 @@
         $(document).ready(function() {
             var urlParams = new URLSearchParams(window.location.search);
             var agentId = urlParams.get('id');
+            console.log('Agent ID:', agentId); // Debug: vérifier l'identifiant de l'agent
     
             if (agentId) {
                 $.ajax({
@@ -100,7 +108,7 @@
                     data: { id: agentId },
                     success: function(response) {
                         var agent = JSON.parse(response);
-                        console.log(agent); // Ajoutez cette ligne pour afficher les données récupérées
+                        console.log('Agent data:', agent); // Debug: afficher les données de l'agent
                         if (agent) {
                             var profile = `
                                 <img src="${agent.Photo}" alt="Photo de ${agent.Nom} ${agent.Prenom}">
@@ -158,22 +166,57 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <div class="action-buttons">
-                                    <button class="btn btn-success" onclick="window.location.href='appointments.html?agentId=${agentId}'">Prendre un RDV</button>
-                                    <button class="btn btn-info">Communiquer avec l'agent immobilier</button>
-                                    <button class="btn btn-warning">Voir son CV</button>
-                                </div>
                             `;
                             $('#agentProfile').append(profile);
                         } else {
                             $('#agentProfile').append('<p>Agent non trouvé.</p>');
                         }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error('Error fetching agent data:', textStatus, errorThrown); // Debug: afficher les erreurs
                     }
                 });
             } else {
                 $('#agentProfile').append('<p>Aucun identifiant d\'agent fourni.</p>');
             }
         });
+
+        function takeAppointment() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var agentId = urlParams.get('id');
+            var proprieteid = urlParams.get('proprieteid')
+            window.location.href = 'select_appointment.html?agentId=' + agentId+'&proprieteid='+ proprieteid;
+        }
+
+        function viewCV() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var agentId = urlParams.get('id');
+            window.location.href = 'view_cv.php?agentId=' + agentId;
+        }
+
+        function communicateWithAgent() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var agentId = urlParams.get('id');
+            console.log('Communicate button clicked. Agent ID:', agentId); // Debug: vérifier que le bouton est cliqué
+
+            $.ajax({
+                url: 'agent_profile.php',
+                type: 'GET',
+                data: { id: agentId },
+                success: function(response) {
+                    var agent = JSON.parse(response);
+                    console.log('Email of the agent:', agent.Email); // Debug: afficher l'email de l'agent
+                    if (agent && agent.Email) {
+                        window.location.href = `mailto:${agent.Email}`;
+                    } else {
+                        alert('Adresse email de l\'agent non disponible.');
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error('Error fetching agent email:', textStatus, errorThrown); // Debug: afficher les erreurs
+                }
+            });
+        }
     </script>
 </body>
 </html>
