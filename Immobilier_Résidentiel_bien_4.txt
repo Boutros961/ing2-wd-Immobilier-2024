@@ -1,0 +1,9 @@
+Appartement à vendre - Bord de Mer
+Nombre de pièces: 5
+Nombre de chambres: 3
+Dimensions: 110 m²
+Étage: 5
+Balcon: Oui
+Parking: Oui, 1 place
+Adresse: 123 Quai des Plages, Marseille
+Prix: 950 000 €

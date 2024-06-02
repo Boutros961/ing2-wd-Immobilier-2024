@@ -1,0 +1,9 @@
+Appartement à louer - Moderne
+Nombre de pièces: 4
+Nombre de chambres: 2
+Dimensions: 90 m²
+Étage: 5
+Balcon: Oui
+Parking: Oui, 1 place
+Adresse: 456 Boulevard des Arts, Lyon
+Prix: 1 200 €/mois
