@@ -3,7 +3,7 @@ include 'db.php';
 
 $agentId = $_GET['id'];
 
-$sql = "SELECT u.Nom, u.Prenom, u.Email, a.Specialite, a.CV, 'agent_photo.jpg' AS Photo, '01 23 45 67 89' AS Telephone, 
+$sql = "SELECT u.Nom, u.Prenom, u.Email, a.Specialite, a.CV, u.NumeroDeTelephone as Telephone, a.Photo, 
         a.Lundi_AM, a.Lundi_PM, a.Mardi_AM, a.Mardi_PM, a.Mercredi_AM, a.Mercredi_PM, a.Jeudi_AM, a.Jeudi_PM, a.Vendredi_AM, a.Vendredi_PM, a.Samedi_AM, a.Samedi_PM 
         FROM Agent a
         JOIN Utilisateur u ON a.UtilisateurID = u.ID
@@ -16,7 +16,7 @@ $agent = null;
 if ($result->num_rows > 0) {
     $agent = $result->fetch_assoc();
 
-    // Ensure boolean fields are correctly set
+
     $agent['Lundi_AM'] = (bool)$agent['Lundi_AM'];
     $agent['Lundi_PM'] = (bool)$agent['Lundi_PM'];
     $agent['Mardi_AM'] = (bool)$agent['Mardi_AM'];
