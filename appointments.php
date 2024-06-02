@@ -1,67 +1,53 @@
 <?php
-include 'db.php';
+require_once 'db.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $agentId = $_GET['agentId'];
-    $creneaux = [];
+$action = $_GET['action'] ?? $_POST['action'] ?? '';
 
-    // Récupérer les créneaux horaires de l'agent
-    $sql = "SELECT ID, Jour, Heure, Disponible FROM CreneauxHoraires WHERE AgentID = $agentId ORDER BY FIELD(Jour, 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'), Heure";
+if ($action == 'list') {
+    $sql = "SELECT ID, ProprieteID, AgentID, ClientID, Statut, heure_rendezvous, date_rendezvous
+            FROM rendezvous
+            WHERE Statut = 'Confirmé'";
     $result = $conn->query($sql);
+    $appointments = [];
 
     if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            $creneaux[$row['Jour']][] = [
-                'id' => $row['ID'],
-                'heure' => $row['Heure'],
-                'disponible' => (bool)$row['Disponible']
-            ];
+        while($row = $result->fetch_assoc()) {
+            $appointments[] = $row;
         }
     }
 
-    // Structurer les créneaux pour le front-end
-    $schedule = [];
-    $heures = [
-        '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00',
-        '15:00', '16:00', '17:00', '18:00'
-    ];
-
-    foreach ($heures as $heure) {
-        $row = ['heure' => $heure, 'creneaux' => []];
-        foreach (['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'] as $jour) {
-            $creneau = array_filter($creneaux[$jour] ?? [], function ($c) use ($heure) {
-                return $c['heure'] === $heure;
-            });
-            $row['creneaux'][] = reset($creneau) ?: ['disponible' => false];
-        }
-        $schedule[] = $row;
-    }
-
-    echo json_encode($schedule);
-    $conn->close();
-    exit;
+    echo json_encode($appointments);
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $creneauId = $_POST['creneauId'];
-    $agentId = $_POST['agentId'];
-    $clientId = $_POST['clientId'];
-
-    // Mettre à jour le créneau comme pris
-    $sql = "UPDATE CreneauxHoraires SET Disponible = 0 WHERE ID = $creneauId";
-    if ($conn->query($sql) === TRUE) {
-        // Insérer le rendez-vous dans la table RendezVous
-        $sql = "INSERT INTO RendezVous (ProprieteID, AgentID, ClientID, DateHeure, Statut) VALUES (1, $agentId, $clientId, NOW(), 'Confirmé')";
+if ($action == 'cancel') {
+    $appointmentId = $_POST['appointmentId'];
+    
+    // Récupérer les informations du rendez-vous pour libérer le créneau horaire correspondant
+    $sql = "SELECT AgentID, date_rendezvous, heure_rendezvous FROM rendezvous WHERE ID = $appointmentId";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        $appointment = $result->fetch_assoc();
+        $agentId = $appointment['AgentID'];
+        $jour = $appointment['date_rendezvous'];
+        $heure = $appointment['heure_rendezvous'];
+        
+        // Annuler le rendez-vous
+        $sql = "UPDATE rendezvous SET Statut = 'Annulé' WHERE ID = $appointmentId";
         if ($conn->query($sql) === TRUE) {
-            echo "Rendez-vous pris avec succès.";
+            // Rendre le créneau horaire disponible
+            $sql = "UPDATE creneauxhoraires SET Disponible = 1 WHERE AgentID = $agentId AND Jour = '$jour' AND Heure = '$heure'";
+            if ($conn->query($sql) === TRUE) {
+                echo "Rendez-vous annulé avec succès et créneau horaire rendu disponible";
+            } else {
+                echo "Erreur lors de la mise à jour du créneau horaire: " . $conn->error;
+            }
         } else {
-            echo "Erreur lors de la prise du rendez-vous: " . $conn->error;
+            echo "Erreur lors de l'annulation du rendez-vous: " . $conn->error;
         }
     } else {
-        echo "Erreur lors de la mise à jour du créneau: " . $conn->error;
+        echo "Rendez-vous non trouvé";
     }
-
-    $conn->close();
-    exit;
 }
+
+$conn->close();
 ?>
