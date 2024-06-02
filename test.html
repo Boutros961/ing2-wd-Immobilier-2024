@@ -1,1 +1,43 @@
-bonjour 
+<?php
+session_start();
+
+// Connexion à la base de données
+$servername = "localhost";
+$username = "root";
+password = "root";
+$dbname = "OmnesImmobilier";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+function searchProperties($conn, $query) {
+    $sql = "SELECT * FROM Propriete WHERE Adresse LIKE '%$query%' OR Description LIKE '%$query%'";
+    $result = $conn->query($sql);
+    return $result;
+}
+
+if (isset($_GET['query'])) {
+    $query = $_GET['query'];
+    $result = searchProperties($conn, $query);
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            echo "<div class='property'>";
+            echo "<img src='" . $row['Images'] . "' alt='Property Image'>";
+            echo "<h2>" . $row['Adresse'] . "</h2>";
+            echo "<p>" . $row['Description'] . "</p>";
+            echo "<p>Prix: " . $row['Prix'] . "€</p>";
+            echo "<a href='property.php?id=" . $row['ID'] . "'>Voir plus</a>";
+            echo "</div>";
+        }
+    } else {
+        echo "No properties found";
+    }
+}
+
+$conn->close();
+?>
+
