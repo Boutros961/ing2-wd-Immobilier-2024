@@ -15,7 +15,9 @@ $property = null;
 
 if ($result->num_rows > 0) {
     $property = $result->fetch_assoc();
+    $property['Images'] = explode(';', $property['Images']);
 }
+
 
 echo json_encode($property);
 
