@@ -1,0 +1,9 @@
+Appartement à vendre - Centre Ville
+Nombre de pièces: 4
+Nombre de chambres: 2
+Dimensions: 85 m²
+Étage: 3
+Balcon: Non
+Parking: Non
+Adresse: 456 Avenue de la République, Paris
+Prix: 600 000 €

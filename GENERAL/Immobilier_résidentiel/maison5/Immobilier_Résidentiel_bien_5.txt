@@ -1,0 +1,9 @@
+Maison à vendre - Montagne
+Nombre de pièces: 7
+Nombre de chambres: 4
+Dimensions: 250 m²
+Étage: 2
+Balcon: Oui
+Parking: Oui, 2 places
+Adresse: 456 Route des Alpes, Grenoble
+Prix: 1 300 000 €

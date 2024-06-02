@@ -1,0 +1,9 @@
+Maison à vendre - Villa du Lac
+Nombre de pièces: 8
+Nombre de chambres: 5
+Dimensions: 300 m²
+Étage: 2
+Balcon: Oui
+Parking: Oui, 2 places
+Adresse: 123 Rue des Lacs, Lyon
+Prix: 1 200 000 €

@@ -1,0 +1,9 @@
+Appartement à louer - Familial
+Nombre de pièces: 5
+Nombre de chambres: 3
+Dimensions: 120 m²
+Étage: 3
+Balcon: Oui
+Parking: Oui, 2 places
+Adresse: 123 Avenue des Familles, Bordeaux
+Prix: 1 500 €/mois

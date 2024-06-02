@@ -1,0 +1,9 @@
+Maison à vendre - Campagne
+Nombre de pièces: 6
+Nombre de chambres: 3
+Dimensions: 200 m²
+Étage: 1
+Balcon: Oui
+Parking: Oui, 1 place
+Adresse: 789 Chemin des Vignes, Bordeaux
+Prix: 750 000 €

@@ -1,0 +1,9 @@
+Appartement à louer - Quartier Historique
+Nombre de pièces: 3
+Nombre de chambres: 1
+Dimensions: 60 m²
+Étage: 2
+Balcon: Oui
+Parking: Non
+Adresse: 123 Rue des Remparts, Strasbourg
+Prix: 900 €/mois

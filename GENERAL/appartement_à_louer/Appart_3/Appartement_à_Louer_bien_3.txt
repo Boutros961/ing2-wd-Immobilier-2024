@@ -1,0 +1,9 @@
+Appartement à louer - Studio
+Nombre de pièces: 1
+Nombre de chambres: 0 (studio)
+Dimensions: 30 m²
+Étage: 1
+Balcon: Non
+Parking: Non
+Adresse: 789 Rue des Étudiants, Toulouse
+Prix: 600 €/mois

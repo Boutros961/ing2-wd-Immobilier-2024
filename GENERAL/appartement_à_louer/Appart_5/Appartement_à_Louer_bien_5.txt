@@ -1,0 +1,9 @@
+Appartement à louer - Luxe
+Nombre de pièces: 6
+Nombre de chambres: 4
+Dimensions: 150 m²
+Étage: 7
+Balcon: Oui
+Parking: Oui, 2 places
+Adresse: 456 Avenue du Luxe, Paris
+Prix: 3 000 €/mois
