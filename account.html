@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Omnes Immobilier - Votre Compte</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+ 
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="index.html">Omnes Immobilier</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="browse.html">Tout Parcourir</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="search.html">Recherche</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="appointments.html">Rendez-vous</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="account.html">Votre Compte <span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <h1>Votre Compte</h1>
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Informations du compte</h5>
+                <form id="accountForm">
+                    <div class="form-group">
+                        <label for="nom">Nom</label>
+                        <input type="text" class="form-control" id="nom" value="Jean Dupont">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" value="jean.dupont@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="adresse">Adresse</label>
+                        <input type="text" class="form-control" id="adresse" value="123 Rue de l'Immobilier, 75001 Paris">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+                </form>
+            </div>
+        </div>
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Historique des consultations</h5>
+                <ul class="list-group">
+                    <!-- Exemple de consultation -->
+                    <li class="list-group-item">Consultation avec Jean-Pierre Segado - 20/06/2024 - Résidentiel</li>
+                    <!-- Ajouter d'autres consultations ici -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#accountForm').on('submit', function(event) {
+                event.preventDefault();
+                var nom = $('#nom').val();
+                var email = $('#email').val();
+                var adresse = $('#adresse').val();
+
+                if (!nom || !email || !adresse) {
+                    alert('Veuillez remplir tous les champs.');
+                    return;
+                }
+
+                $.ajax({
+                    url: 'http://localhost:8888/PROJET/account.php',
+                    type: 'POST',
+                    data: {
+                        nom: nom,
+                        email: email,
+                        adresse: adresse
+                    },
+                    success: function(response) {
+                        alert(response);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
